@@ -1,0 +1,223 @@
+<html><head><title>My Life in Weeks</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        margin: 0;
+        padding: 10px;
+    }
+    h1 {
+        color: #333;
+        margin: 10px 0 5px;
+        cursor: text;
+        border: 1px solid transparent;
+        padding: 5px;
+        font-size: 24px;
+    }
+    h1:hover {
+        border-color: #ccc;
+    }
+    h1:focus {
+        outline: none;
+        border-color: #4CAF50;
+    }
+    #stats {
+        font-size: 14px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    #input-container {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    #dob-input {
+        padding: 5px;
+        font-size: 13px;
+        margin-right: 6px;
+    }
+    .btn {
+        padding: 5px 10px;
+        font-size: 14px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-right: 5px;
+    }
+    #generate-btn {
+        background-color: #4CAF50;
+    }
+    #print-btn {
+        background-color: #008CBA;
+    }
+    #weeks-container {
+        display: grid;
+        grid-template-columns: 10px repeat(52, 1fr);
+        gap: 4px;
+        max-width: 1200px;
+    }
+    .week, .year-label, .week-label {
+        width: 8px;
+        height: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 6px;
+    }
+    .week {
+        background-color: #ddd;
+        border-radius: 50%;
+    }
+    .lived {
+        background-color: #4CAF50;
+    }
+    .year-label {
+        font-weight: bold;
+        background-color: #f0f0f0;
+    }
+    .week-label {
+        font-weight: bold;
+        background-color: #f0f0f0;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        height: 24px;
+    }
+    @media print {
+        body {
+            background-color: white;
+        }
+        #input-container, #generate-btn, #print-btn {
+            display: none;
+        }
+        #weeks-container {
+            max-width: none;
+            width: 100%;
+        }
+        .week, .year-label, .week-label {
+            page-break-inside: avoid;
+        }
+        .week {
+            border: 1px solid #ddd;
+        }
+        .lived {
+            background-color: #4CAF50 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+</style>
+<script type="text/javascript" nonce="3ef5692b142a4420908a6375302" src="//local.adguard.org?ts=1721928253771&amp;type=content-script&amp;dmn=party.websim.ai&amp;url=https%3A%2F%2Fparty.websim.ai%2Fapi%2Fv1%2Fsites%2FcjsCj9hVAlu1GSQDZ%2Fhtml%3Fraw%3Dtrue&amp;app=com.google.Chrome&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
+<script type="text/javascript" nonce="3ef5692b142a4420908a6375302" src="//local.adguard.org?ts=1721928253771&amp;name=AdGuard%20Assistant&amp;name=AdGuard%20Extra&amp;type=user-script"></script></head>
+<body>
+    <h1 contenteditable="true">My Life in Weeks</h1>
+    <div id="stats"></div>
+    <div id="input-container">
+        <input type="date" id="dob-input" placeholder="Date of Birth">
+        <button id="generate-btn" class="btn">Generate</button>
+        <button id="print-btn" class="btn">Print</button>
+    </div>
+    <div id="weeks-container"></div>
+
+    <script>
+        const weeksContainer = document.getElementById('weeks-container');
+        const dobInput = document.getElementById('dob-input');
+        const generateBtn = document.getElementById('generate-btn');
+        const printBtn = document.getElementById('print-btn');
+        const title = document.querySelector('h1');
+        const stats = document.getElementById('stats');
+
+        function calculateAge(birthDate, otherDate) {
+            birthDate = new Date(birthDate);
+            otherDate = new Date(otherDate);
+
+            let years = (otherDate.getFullYear() - birthDate.getFullYear());
+            let months = (otherDate.getMonth() - birthDate.getMonth());
+            let days = (otherDate.getDate() - birthDate.getDate());
+
+            if (months < 0 || (months === 0 && days < 0)) {
+                years--;
+                months += 12;
+            }
+
+            if (days < 0) {
+                let lastMonth = new Date(otherDate.getFullYear(), otherDate.getMonth() - 1, birthDate.getDate());
+                days = Math.floor((otherDate - lastMonth) / (1000 * 60 * 60 * 24));
+                months--;
+            }
+
+            return { years, months, days };
+        }
+
+        function generateWeeks() {
+            const dob = new Date(dobInput.value);
+            const today = new Date();
+            const age = calculateAge(dob, today);
+            const timeDiff = today - dob;
+            const weeksLived = Math.floor(timeDiff / (7 * 24 * 60 * 60 * 1000));
+            const totalYears = 90; // Assuming a lifespan of 90 years
+
+            // Update stats
+            stats.innerHTML = `${age.years} years, ${age.months} months, ${age.days} days | Weeks: ${weeksLived}`;
+
+            weeksContainer.innerHTML = '';
+
+            // Add week labels
+            weeksContainer.appendChild(document.createElement('div'));
+            for (let i = 1; i <= 52; i++) {
+                const weekLabel = document.createElement('div');
+                weekLabel.classList.add('week-label');
+                weekLabel.textContent = i;
+                weeksContainer.appendChild(weekLabel);
+            }
+
+            for (let year = 0; year < totalYears; year++) {
+                // Add year label
+                const yearLabel = document.createElement('div');
+                yearLabel.classList.add('year-label');
+                yearLabel.textContent = year;
+                weeksContainer.appendChild(yearLabel);
+
+                for (let week = 0; week < 52; week++) {
+                    const weekElement = document.createElement('div');
+                    weekElement.classList.add('week');
+                    if (year * 52 + week < weeksLived) {
+                        weekElement.classList.add('lived');
+                    }
+                    weeksContainer.appendChild(weekElement);
+                }
+            }
+        }
+
+        generateBtn.addEventListener('click', generateWeeks);
+
+        printBtn.addEventListener('click', () => {
+            if (weeksContainer.children.length === 0) {
+                alert("Please generate your life in weeks before printing.");
+            } else {
+                window.print();
+            }
+        });
+
+        // Set the max date to today
+        const today = new Date().toISOString().split('T')[0];
+        dobInput.setAttribute('max', today);
+
+        // Initialize with an empty grid and stats
+        generateWeeks();
+
+        // Make the title editable
+        title.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                this.blur();
+            }
+        });
+    </script>
+</body></html>
