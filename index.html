@@ -1,125 +1,127 @@
-<html><head><title>My Life in Weeks</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        min-height: 100vh;
-        margin: 0;
-        padding: 10px;
-    }
-    h1 {
-        color: #333;
-        margin: 10px 0 5px;
-        cursor: text;
-        border: 1px solid transparent;
-        padding: 5px;
-        font-size: 24px;
-    }
-    h1:hover {
-        border-color: #ccc;
-    }
-    h1:focus {
-        outline: none;
-        border-color: #4CAF50;
-    }
-    #stats {
-        font-size: 14px;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-    #input-container {
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    #dob-input {
-        padding: 5px;
-        font-size: 13px;
-        margin-right: 6px;
-    }
-    .btn {
-        padding: 5px 10px;
-        font-size: 14px;
-        color: white;
-        border: none;
-        cursor: pointer;
-        margin-right: 5px;
-    }
-    #generate-btn {
-        background-color: #4CAF50;
-    }
-    #print-btn {
-        background-color: #008CBA;
-    }
-    #weeks-container {
-        display: grid;
-        grid-template-columns: 10px repeat(52, 1fr);
-        gap: 4px;
-        max-width: 1200px;
-    }
-    .week, .year-label, .week-label {
-        width: 8px;
-        height: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 6px;
-    }
-    .week {
-        background-color: #ddd;
-        border-radius: 50%;
-    }
-    .lived {
-        background-color: #4CAF50;
-    }
-    .year-label {
-        font-weight: bold;
-        background-color: #f0f0f0;
-    }
-    .week-label {
-        font-weight: bold;
-        background-color: #f0f0f0;
-        writing-mode: vertical-rl;
-        text-orientation: mixed;
-        height: 24px;
-    }
-    @media print {
+<html>
+<head>
+    <title>My Life in Weeks</title>
+    <style>
         body {
-            background-color: white;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
         }
-        #input-container, #generate-btn, #print-btn {
-            display: none;
+        h1 {
+            color: #333;
+            margin: 10px 0 5px;
+            cursor: text;
+            border: 1px solid transparent;
+            padding: 5px;
+            font-size: 24px;
+        }
+        h1:hover {
+            border-color: #ccc;
+        }
+        h1:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        #stats {
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        #input-container {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        #dob-input, #end-date-input {
+            padding: 5px;
+            font-size: 13px;
+            margin-right: 6px;
+        }
+        .btn {
+            padding: 5px 10px;
+            font-size: 14px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        #generate-btn {
+            background-color: #4CAF50;
+        }
+        #print-btn {
+            background-color: #008CBA;
         }
         #weeks-container {
-            max-width: none;
-            width: 100%;
+            display: grid;
+            grid-template-columns: 10px repeat(52, 1fr);
+            gap: 4px;
+            max-width: 1200px;
         }
         .week, .year-label, .week-label {
-            page-break-inside: avoid;
+            width: 8px;
+            height: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6px;
         }
         .week {
-            border: 1px solid #ddd;
+            background-color: #ddd;
+            border-radius: 50%;
         }
         .lived {
-            background-color: #4CAF50 !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
+            background-color: #4CAF50;
         }
-    }
-</style>
-<script type="text/javascript" nonce="3ef5692b142a4420908a6375302" src="//local.adguard.org?ts=1721928253771&amp;type=content-script&amp;dmn=party.websim.ai&amp;url=https%3A%2F%2Fparty.websim.ai%2Fapi%2Fv1%2Fsites%2FcjsCj9hVAlu1GSQDZ%2Fhtml%3Fraw%3Dtrue&amp;app=com.google.Chrome&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
-<script type="text/javascript" nonce="3ef5692b142a4420908a6375302" src="//local.adguard.org?ts=1721928253771&amp;name=AdGuard%20Assistant&amp;name=AdGuard%20Extra&amp;type=user-script"></script></head>
+        .year-label {
+            font-weight: bold;
+            background-color: #f0f0f0;
+        }
+        .week-label {
+            font-weight: bold;
+            background-color: #f0f0f0;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            height: 24px;
+        }
+        @media print {
+            body {
+                background-color: white;
+            }
+            #input-container, #generate-btn, #print-btn {
+                display: none;
+            }
+            #weeks-container {
+                max-width: none;
+                width: 100%;
+            }
+            .week, .year-label, .week-label {
+                page-break-inside: avoid;
+            }
+            .week {
+                border: 1px solid #ddd;
+            }
+            .lived {
+                background-color: #4CAF50 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
 <body>
     <h1 contenteditable="true">My Life in Weeks</h1>
     <div id="stats"></div>
     <div id="input-container">
         <input type="date" id="dob-input" placeholder="Date of Birth">
+        <input type="date" id="end-date-input" placeholder="End Date">
         <button id="generate-btn" class="btn">Generate</button>
         <button id="print-btn" class="btn">Print</button>
     </div>
@@ -128,6 +130,7 @@
     <script>
         const weeksContainer = document.getElementById('weeks-container');
         const dobInput = document.getElementById('dob-input');
+        const endDateInput = document.getElementById('end-date-input');
         const generateBtn = document.getElementById('generate-btn');
         const printBtn = document.getElementById('print-btn');
         const title = document.querySelector('h1');
@@ -157,9 +160,9 @@
 
         function generateWeeks() {
             const dob = new Date(dobInput.value);
-            const today = new Date();
-            const age = calculateAge(dob, today);
-            const timeDiff = today - dob;
+            const endDate = new Date(endDateInput.value || new Date());
+            const age = calculateAge(dob, endDate);
+            const timeDiff = endDate - dob;
             const weeksLived = Math.floor(timeDiff / (7 * 24 * 60 * 60 * 1000));
             const totalYears = 90; // Assuming a lifespan of 90 years
 
@@ -208,6 +211,7 @@
         // Set the max date to today
         const today = new Date().toISOString().split('T')[0];
         dobInput.setAttribute('max', today);
+        endDateInput.setAttribute('max', today);
 
         // Initialize with an empty grid and stats
         generateWeeks();
@@ -220,4 +224,5 @@
             }
         });
     </script>
-</body></html>
+</body>
+</html>
