@@ -159,44 +159,82 @@
         }
 
         function generateWeeks() {
-            const dob = new Date(dobInput.value);
-            const endDate = new Date(endDateInput.value || new Date());
-            const age = calculateAge(dob, endDate);
-            const timeDiff = endDate - dob;
-            const weeksLived = Math.floor(timeDiff / (7 * 24 * 60 * 60 * 1000));
-            const totalYears = 90; // Assuming a lifespan of 90 years
+    const dob = new Date(dobInput.value);
+    const endDate = new Date(endDateInput.value || new Date());
 
-            // Update stats
-            stats.innerHTML = `${age.years} years, ${age.months} months, ${age.days} days | Weeks: ${weeksLived}`;
+    const totalYears = 90; // Assuming a lifespan of 90 years
 
-            weeksContainer.innerHTML = '';
+    // Calculate exact age to separate full years and remaining days
+    const age = calculateAge(dob, endDate);
 
-            // Add week labels
-            weeksContainer.appendChild(document.createElement('div'));
-            for (let i = 1; i <= 52; i++) {
-                const weekLabel = document.createElement('div');
-                weekLabel.classList.add('week-label');
-                weekLabel.textContent = i;
-                weeksContainer.appendChild(weekLabel);
+    const fullYearsLived = age.years;
+    const remainingMonths = age.months;
+    const remainingDays = age.days;
+
+    // Calculate the total number of full weeks in the remaining time after full years
+    let remainingWeeks = Math.floor((remainingMonths * 30.44 + remainingDays) / 7); // Approximate month length by average days
+
+    // Calculate the total number of weeks lived
+    let totalWeeksLived = fullYearsLived * 52 + remainingWeeks;
+
+    // Update the statistics
+    stats.innerHTML = `${fullYearsLived} years, ${remainingMonths} months, ${remainingDays} days | Weeks: ${totalWeeksLived}`;
+
+    weeksContainer.innerHTML = '';
+
+    // Add week labels (1-52) at the top of the grid
+    weeksContainer.appendChild(document.createElement('div'));
+    for (let i = 1; i <= 52; i++) {
+        const weekLabel = document.createElement('div');
+        weekLabel.classList.add('week-label');
+        weekLabel.textContent = i;
+        weeksContainer.appendChild(weekLabel);
+    }
+
+    // Populate the grid
+    for (let year = 0; year < totalYears; year++) {
+        const yearLabel = document.createElement('div');
+        yearLabel.classList.add('year-label');
+        yearLabel.textContent = year + 1;
+        weeksContainer.appendChild(yearLabel);
+
+        for (let week = 0; week < 52; week++) {
+            const weekElement = document.createElement('div');
+            weekElement.classList.add('week');
+
+            // Place dots only up to the total weeks lived
+            if (year * 52 + week < totalWeeksLived) {
+                weekElement.classList.add('lived');
             }
 
-            for (let year = 0; year < totalYears; year++) {
-                // Add year label
-                const yearLabel = document.createElement('div');
-                yearLabel.classList.add('year-label');
-                yearLabel.textContent = year;
-                weeksContainer.appendChild(yearLabel);
-
-                for (let week = 0; week < 52; week++) {
-                    const weekElement = document.createElement('div');
-                    weekElement.classList.add('week');
-                    if (year * 52 + week < weeksLived) {
-                        weekElement.classList.add('lived');
-                    }
-                    weeksContainer.appendChild(weekElement);
-                }
-            }
+            weeksContainer.appendChild(weekElement);
         }
+    }
+}
+
+function calculateAge(birthDate, otherDate) {
+    birthDate = new Date(birthDate);
+    otherDate = new Date(otherDate);
+
+    let years = otherDate.getFullYear() - birthDate.getFullYear();
+    let months = otherDate.getMonth() - birthDate.getMonth();
+    let days = otherDate.getDate() - birthDate.getDate();
+
+    if (days < 0) {
+        months -= 1;
+        days += new Date(otherDate.getFullYear(), otherDate.getMonth(), 0).getDate();
+    }
+
+    if (months < 0) {
+        years -= 1;
+        months += 12;
+    }
+
+    return { years, months, days };
+}
+
+
+
 
         generateBtn.addEventListener('click', generateWeeks);
 
